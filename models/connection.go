@@ -19,5 +19,15 @@ func ConnectToDatabase() {
 		panic("Failed to connect to database!")
 	}
 
+	err = db.AutoMigrate(&Organization{})
+	if err != nil {
+		panic("Error setting up Organizations table")
+	}
+
+	err = db.AutoMigrate(&User{})
+	if err != nil {
+		panic("Error setting up Users table")
+	}
+
 	DB = db
 }
