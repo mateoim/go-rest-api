@@ -16,5 +16,13 @@ func main() {
 	r.DELETE("/organizations/:id", controllers.DeleteOrganization)
 	r.PATCH("/organizations/:id", controllers.UpdateOrganization)
 
+	r.GET("/users", controllers.GetUsers)
+	r.POST("/users", controllers.CreateUser)
+	r.GET("/users/:id", controllers.GetUser)
+	r.DELETE("/users/:id", controllers.DeleteUser)
+	r.PATCH("/users/:id", controllers.UpdateUser)
+
+	r.GET("/organizations/:id/users", controllers.GetUsersByOrganization)
+
 	r.Run()
 }
