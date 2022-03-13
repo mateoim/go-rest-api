@@ -59,7 +59,7 @@ func DeleteUser(c *gin.Context) {
 
 	config.DB.Delete(&user)
 
-	c.JSON(http.StatusNoContent, nil)
+	c.Status(http.StatusNoContent)
 }
 
 func UpdateUser(c *gin.Context) {

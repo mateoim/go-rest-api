@@ -5,6 +5,7 @@ import (
 	"go-rest-api/config"
 	"go-rest-api/models"
 	"net/http"
+	"strconv"
 	"time"
 )
 
@@ -37,6 +38,14 @@ func CreateMeeting(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	
+	meeting.EventID = uint(id)
 
 	eventStartTime := time.Time(event.StartDate).UTC()
 	eventEndTime := time.Time(event.EndDate).UTC()
@@ -94,5 +103,5 @@ func DeleteMeeting(c *gin.Context) {
 
 	config.DB.Delete(&meeting)
 
-	c.JSON(http.StatusNoContent, nil)
+	c.Status(http.StatusNoContent)
 }

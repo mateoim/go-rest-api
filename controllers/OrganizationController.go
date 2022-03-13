@@ -54,7 +54,7 @@ func DeleteOrganization(c *gin.Context) {
 
 	config.DB.Delete(&organization)
 
-	c.JSON(http.StatusNoContent, nil)
+	c.Status(http.StatusNoContent)
 }
 
 func UpdateOrganization(c *gin.Context) {

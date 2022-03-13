@@ -61,7 +61,7 @@ func DeleteEvent(c *gin.Context) {
 
 	config.DB.Delete(&event)
 
-	c.JSON(http.StatusNoContent, nil)
+	c.Status(http.StatusNoContent)
 }
 
 func UpdateEvent(c *gin.Context) {
@@ -109,5 +109,5 @@ func RegisterUser(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, nil)
+	c.Status(http.StatusCreated)
 }
