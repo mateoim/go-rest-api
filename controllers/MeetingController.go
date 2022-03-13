@@ -44,7 +44,7 @@ func CreateMeeting(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	
+
 	meeting.EventID = uint(id)
 
 	eventStartTime := time.Time(event.StartDate).UTC()
@@ -104,4 +104,27 @@ func DeleteMeeting(c *gin.Context) {
 	config.DB.Delete(&meeting)
 
 	c.Status(http.StatusNoContent)
+}
+
+func Schedule(c *gin.Context) {
+	var meeting models.Meeting
+
+	if err := GetMeetingModel(c, &meeting); err != nil {
+		return
+	}
+
+	var invitations []models.Invitation
+	if err := config.DB.Model(&meeting).Association("Invitations").Find(&invitations); err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+
+	for _, inv := range invitations {
+		if inv.Status != models.Accepted {
+			c.AbortWithStatusJSON(http.StatusConflict, gin.H{"error": "Pending or rejected invitation found."})
+			return
+		}
+	}
+
+	c.Status(http.StatusOK)
 }
