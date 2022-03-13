@@ -6,7 +6,7 @@ import (
 	"go-rest-api/controllers"
 )
 
-func main() {
+func SetupRouter() *gin.Engine {
 	r := gin.Default()
 	config.ConnectToDatabase()
 
@@ -35,6 +35,7 @@ func main() {
 	r.POST("/events/:id/meetings", controllers.CreateMeeting)
 	r.GET("/events/:id/meetings/:meeting-id", controllers.GetMeeting)
 	r.DELETE("/events/:id/meetings/:meeting-id", controllers.DeleteMeeting)
+	r.POST("/events/:id/meetings/:meeting-id/schedule", controllers.Schedule)
 
 	r.GET("/events/:id/meetings/:meeting-id/invitations", controllers.GetInvitations)
 	r.POST("/events/:id/meetings/:meeting-id/invitations", controllers.CreateInvitation)
@@ -42,6 +43,12 @@ func main() {
 	r.DELETE("/events/:id/meetings/:meeting-id/invitations/:invitation-id", controllers.DeleteInvitation)
 	r.POST("/events/:id/meetings/:meeting-id/invitations/:invitation-id/accept", controllers.Accept)
 	r.POST("/events/:id/meetings/:meeting-id/invitations/:invitation-id/reject", controllers.Reject)
+
+	return r
+}
+
+func main() {
+	r := SetupRouter()
 
 	r.Run()
 }
