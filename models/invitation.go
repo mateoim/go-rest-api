@@ -6,7 +6,7 @@ import (
 
 type Invitation struct {
 	ID        uint             `json:"id" gorm:"primarykey"`
-	MeetingID uint             `json:"meeting" binding:"required"`
+	MeetingID uint             `json:"meeting"`
 	UserID    uint             `json:"user" binding:"required"`
 	Status    InvitationStatus `json:"status"`
 }

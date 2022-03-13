@@ -1,9 +1,7 @@
 package models
 
-import "gorm.io/gorm"
-
 type Organization struct {
-	gorm.Model
+	ID    uint   `json:"id" gorm:"primarykey"`
 	Name  string `json:"name" binding:"required"`
 	Users []User `json:"users"`
 }
