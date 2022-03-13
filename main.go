@@ -2,13 +2,13 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-rest-api/config"
 	"go-rest-api/controllers"
-	"go-rest-api/models"
 )
 
 func main() {
 	r := gin.Default()
-	models.ConnectToDatabase()
+	config.ConnectToDatabase()
 
 	r.GET("/organizations", controllers.GetOrganizations)
 	r.POST("/organizations", controllers.CreateOrganization)
@@ -23,6 +23,25 @@ func main() {
 	r.PATCH("/users/:id", controllers.UpdateUser)
 
 	r.GET("/organizations/:id/users", controllers.GetUsersByOrganization)
+
+	r.GET("/events", controllers.GetEvents)
+	r.POST("/events", controllers.CreateEvent)
+	r.GET("/events/:id", controllers.GetEvent)
+	r.DELETE("/events/:id", controllers.DeleteEvent)
+	r.PATCH("/events/:id", controllers.UpdateEvent)
+	r.POST("/events/:id/register", controllers.RegisterUser)
+
+	r.GET("/events/:id/meetings", controllers.GetMeetings)
+	r.POST("/events/:id/meetings", controllers.CreateMeeting)
+	r.GET("/events/:id/meetings/:meeting-id", controllers.GetMeeting)
+	r.DELETE("/events/:id/meetings/:meeting-id", controllers.DeleteMeeting)
+
+	r.GET("/events/:id/meetings/:meeting-id/invitations", controllers.GetInvitations)
+	r.POST("/events/:id/meetings/:meeting-id/invitations", controllers.CreateInvitation)
+	r.GET("/events/:id/meetings/:meeting-id/invitations/:invitation-id", controllers.GetInvitation)
+	r.DELETE("/events/:id/meetings/:meeting-id/invitations/:invitation-id", controllers.DeleteInvitation)
+	r.POST("/events/:id/meetings/:meeting-id/invitations/:invitation-id/accept", controllers.Accept)
+	r.POST("/events/:id/meetings/:meeting-id/invitations/:invitation-id/reject", controllers.Reject)
 
 	r.Run()
 }
