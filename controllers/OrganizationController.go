@@ -2,13 +2,14 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-rest-api/config"
 	"go-rest-api/models"
 	"net/http"
 )
 
 func GetOrganizations(c *gin.Context) {
 	var organizations []models.Organization
-	err := models.DB.Find(&organizations).Error
+	err := config.DB.Find(&organizations).Error
 
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
@@ -25,7 +26,7 @@ func CreateOrganization(c *gin.Context) {
 		return
 	}
 
-	if err := models.DB.Create(&organization).Error; err != nil {
+	if err := config.DB.Create(&organization).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -36,7 +37,7 @@ func CreateOrganization(c *gin.Context) {
 func GetOrganization(c *gin.Context) {
 	var organization models.Organization
 
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&organization).Error; err != nil {
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&organization).Error; err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -46,19 +47,19 @@ func GetOrganization(c *gin.Context) {
 
 func DeleteOrganization(c *gin.Context) {
 	var organization models.Organization
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&organization).Error; err != nil {
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&organization).Error; err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 
-	models.DB.Delete(&organization)
+	config.DB.Delete(&organization)
 
 	c.JSON(http.StatusNoContent, nil)
 }
 
 func UpdateOrganization(c *gin.Context) {
 	var organization models.Organization
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&organization).Error; err != nil {
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&organization).Error; err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -70,7 +71,7 @@ func UpdateOrganization(c *gin.Context) {
 	}
 
 	input.ID = organization.ID
-	models.DB.Model(&organization).Updates(input)
+	config.DB.Model(&organization).Updates(input)
 
 	c.JSON(http.StatusOK, organization)
 }

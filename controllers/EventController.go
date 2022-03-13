@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-rest-api/config"
 	"go-rest-api/models"
 	"net/http"
 	"strconv"
@@ -10,7 +11,7 @@ import (
 
 func GetEvents(c *gin.Context) {
 	var events []models.Event
-	err := models.DB.Find(&events).Error
+	err := config.DB.Find(&events).Error
 
 	if err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
@@ -32,7 +33,7 @@ func CreateEvent(c *gin.Context) {
 		return
 	}
 
-	if err := models.DB.Create(&event).Error; err != nil {
+	if err := config.DB.Create(&event).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -43,7 +44,7 @@ func CreateEvent(c *gin.Context) {
 func GetEvent(c *gin.Context) {
 	var event models.Event
 
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -53,19 +54,19 @@ func GetEvent(c *gin.Context) {
 
 func DeleteEvent(c *gin.Context) {
 	var event models.Event
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 
-	models.DB.Delete(&event)
+	config.DB.Delete(&event)
 
 	c.JSON(http.StatusNoContent, nil)
 }
 
 func UpdateEvent(c *gin.Context) {
 	var event models.Event
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -79,14 +80,14 @@ func UpdateEvent(c *gin.Context) {
 	input.ID = event.ID
 	input.StartDate = event.StartDate
 	input.EndDate = event.EndDate
-	models.DB.Model(&event).Updates(input)
+	config.DB.Model(&event).Updates(input)
 
 	c.JSON(http.StatusOK, event)
 }
 
 func RegisterUser(c *gin.Context) {
 	var event models.Event
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -98,12 +99,12 @@ func RegisterUser(c *gin.Context) {
 	}
 
 	var user models.User
-	if err := models.DB.Where("id = ?", strconv.Itoa(int(form.ID))).First(&user).Error; err != nil {
+	if err := config.DB.Where("id = ?", strconv.Itoa(int(form.ID))).First(&user).Error; err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 
-	if err := models.DB.Model(&event).Association("Users").Append(&user); err != nil {
+	if err := config.DB.Model(&event).Association("Users").Append(&user); err != nil {
 		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}

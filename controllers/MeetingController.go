@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"github.com/gin-gonic/gin"
+	"go-rest-api/config"
 	"go-rest-api/models"
 	"net/http"
 	"time"
@@ -11,12 +12,12 @@ func GetMeetings(c *gin.Context) {
 	var event models.Event
 	var meetings []models.Meeting
 
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 
-	if err := models.DB.Model(&event).Association("Meetings").Find(&meetings); err != nil {
+	if err := config.DB.Model(&event).Association("Meetings").Find(&meetings); err != nil {
 		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
 	}
@@ -27,7 +28,7 @@ func CreateMeeting(c *gin.Context) {
 	var event models.Event
 	var meeting models.Meeting
 
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return
 	}
@@ -50,7 +51,7 @@ func CreateMeeting(c *gin.Context) {
 		return
 	}
 
-	if err := models.DB.Create(&meeting).Error; err != nil {
+	if err := config.DB.Create(&meeting).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -71,12 +72,12 @@ func GetMeeting(c *gin.Context) {
 func GetMeetingModel(c *gin.Context, meeting *models.Meeting) error {
 	var event models.Event
 
-	if err := models.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return err
 	}
 
-	if err := models.DB.Where("id = ?", c.Param("meeting-id")).First(&meeting).Error; err != nil {
+	if err := config.DB.Where("id = ?", c.Param("meeting-id")).First(&meeting).Error; err != nil {
 		c.AbortWithStatus(http.StatusNotFound)
 		return err
 	}
@@ -91,7 +92,7 @@ func DeleteMeeting(c *gin.Context) {
 		return
 	}
 
-	models.DB.Delete(&meeting)
+	config.DB.Delete(&meeting)
 
 	c.JSON(http.StatusNoContent, nil)
 }

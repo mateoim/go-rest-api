@@ -1,6 +1,7 @@
-package models
+package config
 
 import (
+	"go-rest-api/models"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -19,14 +20,29 @@ func ConnectToDatabase() {
 		panic("Failed to connect to database!")
 	}
 
-	err = db.AutoMigrate(&Organization{})
+	err = db.AutoMigrate(&models.Organization{})
 	if err != nil {
 		panic("Error setting up Organizations table")
 	}
 
-	err = db.AutoMigrate(&User{})
+	err = db.AutoMigrate(&models.User{})
 	if err != nil {
 		panic("Error setting up Users table")
+	}
+
+	err = db.AutoMigrate(&models.Event{})
+	if err != nil {
+		panic("Error setting up Events table")
+	}
+
+	err = db.AutoMigrate(&models.Meeting{})
+	if err != nil {
+		panic("Error setting up Meetings table")
+	}
+
+	err = db.AutoMigrate(&models.Invitation{})
+	if err != nil {
+		panic("Error setting up Invitations table")
 	}
 
 	DB = db
