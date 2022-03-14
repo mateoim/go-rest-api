@@ -1,4 +1,3 @@
-basePath: /
 definitions:
   models.Event:
     properties:
@@ -73,12 +72,8 @@ definitions:
     - last-name
     - organization
     type: object
-host: localhost:8080
 info:
   contact: {}
-  description: Simple Go RESt API application
-  title: Swagger Go REST API
-  version: "1.0"
 paths:
   /event/{id}:
     delete:
@@ -391,6 +386,26 @@ paths:
       tags:
       - event
       - user
+  /events/{id}/users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users that have registered this event
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "404":
+          description: Not Found
+      summary: List all users for this event
+      tags:
+      - event
+      - user
   /organizations:
     get:
       consumes:
@@ -583,4 +598,64 @@ paths:
       summary: Update a user
       tags:
       - user
+  /users/{id}/events:
+    get:
+      consumes:
+      - application/json
+      description: Get all events that this user has registered
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Event'
+            type: array
+        "404":
+          description: Not Found
+      summary: List all events for this user
+      tags:
+      - user
+      - event
+  /users/{id}/invitations:
+    get:
+      consumes:
+      - application/json
+      description: Get all invitations that this user has received
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Invitation'
+            type: array
+        "404":
+          description: Not Found
+      summary: List all invitations for this user
+      tags:
+      - user
+      - invitation
+  /users/{id}/meetings:
+    get:
+      consumes:
+      - application/json
+      description: Get all meetings that this user has accepted
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Meeting'
+            type: array
+        "404":
+          description: Not Found
+      summary: List all meetings for this user
+      tags:
+      - user
+      - meeting
 swagger: "2.0"
