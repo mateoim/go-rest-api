@@ -1,7 +1,7 @@
 # go-rest-api
 A simple REST API written in Go
 
-#Usage
+# Usage
 To run:
 1. Enter database password or configure connection to a different database in `config/connection.go`
 2. Use `go mod tidy` command to download all dependencies
