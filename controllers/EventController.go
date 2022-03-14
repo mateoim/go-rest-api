@@ -9,6 +9,15 @@ import (
 	"time"
 )
 
+// GetEvents godoc
+// @Summary      List all events
+// @Description  Get all events
+// @Tags         event
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   models.Event
+// @Failure      404  {object}  nil
+// @Router       /events [get]
 func GetEvents(c *gin.Context) {
 	var events []models.Event
 	err := config.DB.Find(&events).Error
@@ -20,6 +29,16 @@ func GetEvents(c *gin.Context) {
 	}
 }
 
+// CreateEvent godoc
+// @Summary      Create an event
+// @Description  Create a new event
+// @Tags         event
+// @Accept       json
+// @Produce      json
+// @Success      201  {object}  models.Event
+// @Failure      400  {object}  nil
+// @Failure      500  {object}  nil
+// @Router       /events [post]
 func CreateEvent(c *gin.Context) {
 	var event models.Event
 
@@ -41,6 +60,15 @@ func CreateEvent(c *gin.Context) {
 	c.JSON(http.StatusCreated, event)
 }
 
+// GetEvent godoc
+// @Summary      Get an event
+// @Description  Get an event by id
+// @Tags         event
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.Event
+// @Failure      404  {object}  nil
+// @Router       /events/{id} [get]
 func GetEvent(c *gin.Context) {
 	var event models.Event
 
@@ -52,6 +80,15 @@ func GetEvent(c *gin.Context) {
 	c.JSON(http.StatusOK, event)
 }
 
+// DeleteEvent godoc
+// @Summary      Delete an event
+// @Description  Delete an event by id
+// @Tags         event
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  nil
+// @Failure      404  {object}  nil
+// @Router       /event/{id} [delete]
 func DeleteEvent(c *gin.Context) {
 	var event models.Event
 	if err := config.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
@@ -64,6 +101,16 @@ func DeleteEvent(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
+// UpdateEvent godoc
+// @Summary      Update an event
+// @Description  Update event info
+// @Tags         event
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.Event
+// @Failure      404  {object}  nil
+// @Failure      400  {object}  nil
+// @Router       /events/{id} [patch]
 func UpdateEvent(c *gin.Context) {
 	var event models.Event
 	if err := config.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
@@ -85,6 +132,18 @@ func UpdateEvent(c *gin.Context) {
 	c.JSON(http.StatusOK, event)
 }
 
+// RegisterUser godoc
+// @Summary      Registers a user to the given event
+// @Description  Registers a user to the given event by sending user id in JSON body
+// @Tags         event
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Success      201  {object}  nil
+// @Failure      404  {object}  nil
+// @Failure      400  {object}  nil
+// @Failure      500  {object}  nil
+// @Router       /events/{id}/register [post]
 func RegisterUser(c *gin.Context) {
 	var event models.Event
 	if err := config.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {

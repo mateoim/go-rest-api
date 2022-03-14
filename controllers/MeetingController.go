@@ -9,6 +9,16 @@ import (
 	"time"
 )
 
+// GetMeetings godoc
+// @Summary      List all meetings for the given event
+// @Description  Get all meetings for the given event
+// @Tags         meeting
+// @Tags         event
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   models.Meeting
+// @Failure      404  {object}  nil
+// @Router       /events/{id}/meetings [get]
 func GetMeetings(c *gin.Context) {
 	var event models.Event
 	var meetings []models.Meeting
@@ -25,6 +35,18 @@ func GetMeetings(c *gin.Context) {
 	c.JSON(http.StatusOK, meetings)
 }
 
+// CreateMeeting godoc
+// @Summary      Create a meeting for the given event
+// @Description  Create a new meeting for the given event
+// @Tags         meeting
+// @Tags         event
+// @Accept       json
+// @Produce      json
+// @Success      201  {object}  models.Meeting
+// @Failure      404  {object}  nil
+// @Failure      400  {object}  nil
+// @Failure      500  {object}  nil
+// @Router       /events/{id}/meetings [post]
 func CreateMeeting(c *gin.Context) {
 	var event models.Event
 	var meeting models.Meeting
@@ -68,6 +90,16 @@ func CreateMeeting(c *gin.Context) {
 	c.JSON(http.StatusCreated, meeting)
 }
 
+// GetMeeting godoc
+// @Summary      Get a meeting for the given event
+// @Description  Get a meeting for the given event by meeting id
+// @Tags         meeting
+// @Tags         event
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.Meeting
+// @Failure      404  {object}  nil
+// @Router       /events/{id}/meetings/{meeting-id} [get]
 func GetMeeting(c *gin.Context) {
 	var meeting models.Meeting
 
@@ -94,6 +126,16 @@ func GetMeetingModel(c *gin.Context, meeting *models.Meeting) error {
 	return nil
 }
 
+// DeleteMeeting godoc
+// @Summary      Delete a meeting
+// @Description  Delete a meeting for the given event by meeting id
+// @Tags         meeting
+// @Tags         event
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  nil
+// @Failure      404  {object}  nil
+// @Router       /events/{id}/meetings/{meeting-id} [delete]
 func DeleteMeeting(c *gin.Context) {
 	var meeting models.Meeting
 
@@ -106,6 +148,17 @@ func DeleteMeeting(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
+// Schedule godoc
+// @Summary      Schedule the given meeting
+// @Description  Schedule the given meeting if no pending or rejected invitations are found
+// @Tags         meeting
+// @Tags         event
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  nil
+// @Failure      404  {object}  nil
+// @Failure      409  {object}  nil
+// @Router       /events/{id}/meetings/{meeting-id}/schedule [post]
 func Schedule(c *gin.Context) {
 	var meeting models.Meeting
 

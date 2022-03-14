@@ -7,6 +7,15 @@ import (
 	"net/http"
 )
 
+// GetOrganizations godoc
+// @Summary      List all organizations
+// @Description  Get all organizations
+// @Tags         organization
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   models.Organization
+// @Failure      404  {object}  nil
+// @Router       /organizations [get]
 func GetOrganizations(c *gin.Context) {
 	var organizations []models.Organization
 	err := config.DB.Find(&organizations).Error
@@ -18,6 +27,16 @@ func GetOrganizations(c *gin.Context) {
 	}
 }
 
+// CreateOrganization godoc
+// @Summary      Create an organization
+// @Description  Create a new organization
+// @Tags         organization
+// @Accept       json
+// @Produce      json
+// @Success      201  {object}  models.Organization
+// @Failure      400  {object}  nil
+// @Failure      500  {object}  nil
+// @Router       /organizations [post]
 func CreateOrganization(c *gin.Context) {
 	var organization models.Organization
 
@@ -34,6 +53,15 @@ func CreateOrganization(c *gin.Context) {
 	c.JSON(http.StatusCreated, organization)
 }
 
+// GetOrganization godoc
+// @Summary      Get an organization
+// @Description  Get an organization by id
+// @Tags         organization
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.Organization
+// @Failure      404  {object}  nil
+// @Router       /organizations/{id} [get]
 func GetOrganization(c *gin.Context) {
 	var organization models.Organization
 
@@ -45,6 +73,15 @@ func GetOrganization(c *gin.Context) {
 	c.JSON(http.StatusOK, organization)
 }
 
+// DeleteOrganization godoc
+// @Summary      Delete an organization
+// @Description  Delete an organization by id
+// @Tags         organization
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  nil
+// @Failure      404  {object}  nil
+// @Router       /organizations/{id} [delete]
 func DeleteOrganization(c *gin.Context) {
 	var organization models.Organization
 	if err := config.DB.Where("id = ?", c.Param("id")).First(&organization).Error; err != nil {
@@ -57,6 +94,16 @@ func DeleteOrganization(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
+// UpdateOrganization godoc
+// @Summary      Update an organization
+// @Description  Update organization info
+// @Tags         organization
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.Organization
+// @Failure      404  {object}  nil
+// @Failure      400  {object}  nil
+// @Router       /organizations/{id} [patch]
 func UpdateOrganization(c *gin.Context) {
 	var organization models.Organization
 	if err := config.DB.Where("id = ?", c.Param("id")).First(&organization).Error; err != nil {

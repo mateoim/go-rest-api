@@ -9,6 +9,16 @@ import (
 	"time"
 )
 
+// GetInvitations godoc
+// @Summary      List all invitations for the given meeting
+// @Description  Get all meetings for the given event
+// @Tags         meeting
+// @Tags         invitation
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   models.Invitation
+// @Failure      404  {object}  nil
+// @Router       /events/{id}/meetings/{meeting-id}/invitations [get]
 func GetInvitations(c *gin.Context) {
 	var meeting models.Meeting
 	var invitations []models.Invitation
@@ -25,6 +35,18 @@ func GetInvitations(c *gin.Context) {
 	c.JSON(http.StatusOK, invitations)
 }
 
+// CreateInvitation godoc
+// @Summary      Create an invitation for the given meeting
+// @Description  Create a new invitation for the given meeting
+// @Tags         meeting
+// @Tags         invitation
+// @Accept       json
+// @Produce      json
+// @Success      201  {object}  models.Invitation
+// @Failure      404  {object}  nil
+// @Failure      400  {object}  nil
+// @Failure      500  {object}  nil
+// @Router       /events/{id}/meetings/{meeting-id}/invitations [post]
 func CreateInvitation(c *gin.Context) {
 	var meeting models.Meeting
 	var invitation models.Invitation
@@ -81,6 +103,16 @@ func CreateInvitation(c *gin.Context) {
 	c.JSON(http.StatusCreated, invitation)
 }
 
+// GetInvitation godoc
+// @Summary      Get an invitation for the given meeting
+// @Description  Get an invitation for the given meeting by invitation id
+// @Tags         meeting
+// @Tags         invitation
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.Invitation
+// @Failure      404  {object}  nil
+// @Router       /events/{id}/meetings/{meeting-id}/invitations/{invitation-id} [get]
 func GetInvitation(c *gin.Context) {
 	var invitation models.Invitation
 
@@ -106,6 +138,16 @@ func GetInvitationModel(c *gin.Context, invitation *models.Invitation) error {
 	return nil
 }
 
+// DeleteInvitation godoc
+// @Summary      Delete an invitation
+// @Description  Delete an invitation for the given meeting by invitation id
+// @Tags         meeting
+// @Tags         invitation
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  nil
+// @Failure      404  {object}  nil
+// @Router       /events/{id}/meetings/{meeting-id}/invitations/{invitation-id} [delete]
 func DeleteInvitation(c *gin.Context) {
 	var invitation models.Invitation
 
@@ -118,10 +160,30 @@ func DeleteInvitation(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
+// Accept godoc
+// @Summary      Accept the given invitation
+// @Description  Accept the given invitation if no conflict is found
+// @Tags         meeting
+// @Tags         invitation
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.Invitation
+// @Failure      404  {object}  nil
+// @Router       /events/{id}/meetings/{meeting-id}/invitations/{invitation-id}/accept [post]
 func Accept(c *gin.Context) {
 	UpdateStatus(c, true)
 }
 
+// Reject godoc
+// @Summary      Reject the given invitation
+// @Description  Reject the given invitation
+// @Tags         meeting
+// @Tags         invitation
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.Invitation
+// @Failure      404  {object}  nil
+// @Router       /events/{id}/meetings/{meeting-id}/invitations/{invitation-id}/reject [post]
 func Reject(c *gin.Context) {
 	UpdateStatus(c, false)
 }

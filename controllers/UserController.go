@@ -7,6 +7,15 @@ import (
 	"net/http"
 )
 
+// GetUsers godoc
+// @Summary      List all users
+// @Description  Get all users
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   models.User
+// @Failure      404  {object}  nil
+// @Router       /users [get]
 func GetUsers(c *gin.Context) {
 	var users []models.User
 	err := config.DB.Find(&users).Error
@@ -18,6 +27,15 @@ func GetUsers(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
+// GetUser godoc
+// @Summary      Get a user
+// @Description  Get a user by id
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.User
+// @Failure      404  {object}  nil
+// @Router       /users/{id} [get]
 func GetUser(c *gin.Context) {
 	var user models.User
 
@@ -29,6 +47,16 @@ func GetUser(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+// CreateUser godoc
+// @Summary      Create a user
+// @Description  Create a new user
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Success      201  {object}  models.User
+// @Failure      400  {object}  nil
+// @Failure      500  {object}  nil
+// @Router       /users [post]
 func CreateUser(c *gin.Context) {
 	var user models.User
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -50,6 +78,15 @@ func CreateUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, user)
 }
 
+// DeleteUser godoc
+// @Summary      Delete a user
+// @Description  Delete a user by id
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  nil
+// @Failure      404  {object}  nil
+// @Router       /users/{id} [delete]
 func DeleteUser(c *gin.Context) {
 	var user models.User
 	if err := config.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
@@ -62,6 +99,16 @@ func DeleteUser(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
+// UpdateUser godoc
+// @Summary      Update a user
+// @Description  Update user info
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Success      200  {object}  models.User
+// @Failure      404  {object}  nil
+// @Failure      400  {object}  nil
+// @Router       /users/{id} [patch]
 func UpdateUser(c *gin.Context) {
 	var user models.User
 	if err := config.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
@@ -89,6 +136,16 @@ func UpdateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
+// GetUsersByOrganization godoc
+// @Summary      List all users in the given organization
+// @Description  Get all users in the given organization
+// @Tags         user
+// @Tags         organization
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   models.User
+// @Failure      404  {object}  nil
+// @Router       /organizations/{id}/users [get]
 func GetUsersByOrganization(c *gin.Context) {
 	var organization models.Organization
 	var users []models.User
