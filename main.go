@@ -2,9 +2,25 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"go-rest-api/config"
 	"go-rest-api/controllers"
+	"go-rest-api/docs"
 )
+
+func main() {
+	docs.SwaggerInfo.Title = "Swagger Go REST API"
+	docs.SwaggerInfo.Description = "Simple Go REST API application."
+	docs.SwaggerInfo.Version = "1.0"
+	docs.SwaggerInfo.Host = "localhost:8080"
+	docs.SwaggerInfo.BasePath = "/"
+	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+
+	r := SetupRouter()
+
+	r.Run()
+}
 
 func SetupRouter() *gin.Engine {
 	r := gin.Default()
@@ -44,11 +60,7 @@ func SetupRouter() *gin.Engine {
 	r.POST("/events/:id/meetings/:meeting-id/invitations/:invitation-id/accept", controllers.Accept)
 	r.POST("/events/:id/meetings/:meeting-id/invitations/:invitation-id/reject", controllers.Reject)
 
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	return r
-}
-
-func main() {
-	r := SetupRouter()
-
-	r.Run()
 }
