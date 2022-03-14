@@ -1,0 +1,586 @@
+basePath: /
+definitions:
+  models.Event:
+    properties:
+      description:
+        type: string
+      end-date:
+        type: string
+      id:
+        type: integer
+      start-date:
+        type: string
+      title:
+        type: string
+    required:
+    - end-date
+    - start-date
+    - title
+    type: object
+  models.Invitation:
+    properties:
+      id:
+        type: integer
+      meeting:
+        type: integer
+      status:
+        type: integer
+      user:
+        type: integer
+    required:
+    - user
+    type: object
+  models.Meeting:
+    properties:
+      end-date:
+        type: string
+      event:
+        type: integer
+      id:
+        type: integer
+      start-date:
+        type: string
+      title:
+        type: string
+    required:
+    - end-date
+    - start-date
+    type: object
+  models.Organization:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - name
+    type: object
+  models.User:
+    properties:
+      email:
+        type: string
+      first-name:
+        type: string
+      id:
+        type: integer
+      last-name:
+        type: string
+      organization:
+        type: integer
+    required:
+    - email
+    - first-name
+    - last-name
+    - organization
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Simple Go RESt API application
+  title: Swagger Go REST API
+  version: "1.0"
+paths:
+  /event/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an event by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      summary: Delete an event
+      tags:
+      - event
+  /events:
+    get:
+      consumes:
+      - application/json
+      description: Get all events
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Event'
+            type: array
+        "404":
+          description: Not Found
+      summary: List all events
+      tags:
+      - event
+    post:
+      consumes:
+      - application/json
+      description: Create a new event
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Event'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Create an event
+      tags:
+      - event
+  /events/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get an event by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Event'
+        "404":
+          description: Not Found
+      summary: Get an event
+      tags:
+      - event
+    patch:
+      consumes:
+      - application/json
+      description: Update event info
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Event'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: Update an event
+      tags:
+      - event
+  /events/{id}/meetings:
+    get:
+      consumes:
+      - application/json
+      description: Get all meetings for the given event
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Meeting'
+            type: array
+        "404":
+          description: Not Found
+      summary: List all meetings for the given event
+      tags:
+      - meeting
+      - event
+    post:
+      consumes:
+      - application/json
+      description: Create a new meeting for the given event
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Meeting'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Create a meeting for the given event
+      tags:
+      - meeting
+      - event
+  /events/{id}/meetings/{meeting-id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a meeting for the given event by meeting id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      summary: Delete a meeting
+      tags:
+      - meeting
+      - event
+    get:
+      consumes:
+      - application/json
+      description: Get a meeting for the given event by meeting id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Meeting'
+        "404":
+          description: Not Found
+      summary: Get a meeting for the given event
+      tags:
+      - meeting
+      - event
+  /events/{id}/meetings/{meeting-id}/invitations:
+    get:
+      consumes:
+      - application/json
+      description: Get all meetings for the given event
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Invitation'
+            type: array
+        "404":
+          description: Not Found
+      summary: List all invitations for the given meeting
+      tags:
+      - meeting
+      - invitation
+    post:
+      consumes:
+      - application/json
+      description: Create a new invitation for the given meeting
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Invitation'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Create an invitation for the given meeting
+      tags:
+      - meeting
+      - invitation
+  /events/{id}/meetings/{meeting-id}/invitations/{invitation-id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an invitation for the given meeting by invitation id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      summary: Delete an invitation
+      tags:
+      - meeting
+      - invitation
+    get:
+      consumes:
+      - application/json
+      description: Get an invitation for the given meeting by invitation id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Invitation'
+        "404":
+          description: Not Found
+      summary: Get an invitation for the given meeting
+      tags:
+      - meeting
+      - invitation
+  /events/{id}/meetings/{meeting-id}/invitations/{invitation-id}/accept:
+    post:
+      consumes:
+      - application/json
+      description: Accept the given invitation if no conflict is found
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Invitation'
+        "404":
+          description: Not Found
+      summary: Accept the given invitation
+      tags:
+      - meeting
+      - invitation
+  /events/{id}/meetings/{meeting-id}/invitations/{invitation-id}/reject:
+    post:
+      consumes:
+      - application/json
+      description: Reject the given invitation
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Invitation'
+        "404":
+          description: Not Found
+      summary: Reject the given invitation
+      tags:
+      - meeting
+      - invitation
+  /events/{id}/meetings/{meeting-id}/schedule:
+    post:
+      consumes:
+      - application/json
+      description: Schedule the given meeting if no pending or rejected invitations
+        are found
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+        "409":
+          description: Conflict
+      summary: Schedule the given meeting
+      tags:
+      - meeting
+      - event
+  /events/{id}/register:
+    post:
+      consumes:
+      - application/json
+      description: Registers a user to the given event by sending user id in JSON
+        body
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+      summary: Registers a user to the given event
+      tags:
+      - event
+      - user
+  /organizations:
+    get:
+      consumes:
+      - application/json
+      description: Get all organizations
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Organization'
+            type: array
+        "404":
+          description: Not Found
+      summary: List all organizations
+      tags:
+      - organization
+    post:
+      consumes:
+      - application/json
+      description: Create a new organization
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Organization'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Create an organization
+      tags:
+      - organization
+  /organizations/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete an organization by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      summary: Delete an organization
+      tags:
+      - organization
+    get:
+      consumes:
+      - application/json
+      description: Get an organization by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Organization'
+        "404":
+          description: Not Found
+      summary: Get an organization
+      tags:
+      - organization
+    patch:
+      consumes:
+      - application/json
+      description: Update organization info
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Organization'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: Update an organization
+      tags:
+      - organization
+  /organizations/{id}/users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users in the given organization
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "404":
+          description: Not Found
+      summary: List all users in the given organization
+      tags:
+      - user
+      - organization
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.User'
+            type: array
+        "404":
+          description: Not Found
+      summary: List all users
+      tags:
+      - user
+    post:
+      consumes:
+      - application/json
+      description: Create a new user
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+        "500":
+          description: Internal Server Error
+      summary: Create a user
+      tags:
+      - user
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a user by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "404":
+          description: Not Found
+      summary: Delete a user
+      tags:
+      - user
+    get:
+      consumes:
+      - application/json
+      description: Get a user by id
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "404":
+          description: Not Found
+      summary: Get a user
+      tags:
+      - user
+    patch:
+      consumes:
+      - application/json
+      description: Update user info
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.User'
+        "400":
+          description: Bad Request
+        "404":
+          description: Not Found
+      summary: Update a user
+      tags:
+      - user
+swagger: "2.0"
