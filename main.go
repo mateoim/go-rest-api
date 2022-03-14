@@ -37,6 +37,9 @@ func SetupRouter() *gin.Engine {
 	r.GET("/users/:id", controllers.GetUser)
 	r.DELETE("/users/:id", controllers.DeleteUser)
 	r.PATCH("/users/:id", controllers.UpdateUser)
+	r.GET("/users/:id/events", controllers.GetUserEvents)
+	r.GET("/users/:id/meetings", controllers.GetUserMeetings)
+	r.GET("/users/:id/invitations", controllers.GetUserInvitations)
 
 	r.GET("/organizations/:id/users", controllers.GetUsersByOrganization)
 
@@ -46,6 +49,7 @@ func SetupRouter() *gin.Engine {
 	r.DELETE("/events/:id", controllers.DeleteEvent)
 	r.PATCH("/events/:id", controllers.UpdateEvent)
 	r.POST("/events/:id/register", controllers.RegisterUser)
+	r.GET("/events/:id/users", controllers.GetEventUsers)
 
 	r.GET("/events/:id/meetings", controllers.GetMeetings)
 	r.POST("/events/:id/meetings", controllers.CreateMeeting)
