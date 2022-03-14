@@ -170,3 +170,29 @@ func RegisterUser(c *gin.Context) {
 
 	c.Status(http.StatusCreated)
 }
+
+// GetEventUsers godoc
+// @Summary      List all users for this event
+// @Description  Get all users that have registered this event
+// @Tags         event
+// @Tags         user
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   models.User
+// @Failure      404  {object}  nil
+// @Router       /events/{id}/users [get]
+func GetEventUsers(c *gin.Context) {
+	var event models.Event
+	var users []models.User
+
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&event).Error; err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
+	if err := config.DB.Model(&event).Association("Users").Find(&users); err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, users)
+}

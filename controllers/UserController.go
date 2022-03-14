@@ -161,3 +161,81 @@ func GetUsersByOrganization(c *gin.Context) {
 	}
 	c.JSON(http.StatusOK, users)
 }
+
+// GetUserEvents godoc
+// @Summary      List all events for this user
+// @Description  Get all events that this user has registered
+// @Tags         user
+// @Tags         event
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   models.Event
+// @Failure      404  {object}  nil
+// @Router       /users/{id}/events [get]
+func GetUserEvents(c *gin.Context) {
+	var user models.User
+	var events []models.Event
+
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
+	if err := config.DB.Model(&user).Association("Events").Find(&events); err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, events)
+}
+
+// GetUserMeetings godoc
+// @Summary      List all meetings for this user
+// @Description  Get all meetings that this user has accepted
+// @Tags         user
+// @Tags         meeting
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   models.Meeting
+// @Failure      404  {object}  nil
+// @Router       /users/{id}/meetings [get]
+func GetUserMeetings(c *gin.Context) {
+	var user models.User
+	var meetings []models.Meeting
+
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
+	if err := config.DB.Model(&user).Association("Meetings").Find(&meetings); err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, meetings)
+}
+
+// GetUserInvitations godoc
+// @Summary      List all invitations for this user
+// @Description  Get all invitations that this user has received
+// @Tags         user
+// @Tags         invitation
+// @Accept       json
+// @Produce      json
+// @Success      200  {array}   models.Invitation
+// @Failure      404  {object}  nil
+// @Router       /users/{id}/invitations [get]
+func GetUserInvitations(c *gin.Context) {
+	var user models.User
+	var invitations []models.Invitation
+
+	if err := config.DB.Where("id = ?", c.Param("id")).First(&user).Error; err != nil {
+		c.AbortWithStatus(http.StatusNotFound)
+		return
+	}
+
+	if err := config.DB.Model(&user).Association("Invitations").Find(&invitations); err != nil {
+		c.AbortWithStatusJSON(http.StatusNotFound, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, invitations)
+}
